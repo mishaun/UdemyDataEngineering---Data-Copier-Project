@@ -1,0 +1,38 @@
+DOCKER SETUP INFO
+
+%%
+Docker pull postgres
+
+postgres db path
+/Users/Mishaun_Bhakta/Documents/Python & Projects/Courses/Data Engineering Essentials/Project - Data Engineering Data Copier/retail_pg
+
+posgres data path
+/Users/Mishaun_Bhakta/Documents/Python & Projects/Courses/Data Engineering Essentials/Project - Data Engineering Data Copier/data/retail_db_json
+
+To setup container and mount files from local machine to docker container - have to put quotes on directories with spaces for terminal to read it correctly
+%%
+docker run --name retail_pg -e POSTGRES_PASSWORD=itversity -d -v /Users/Mishaun_Bhakta/Documents/'Python & Projects'/Courses/'Data Engineering Essentials'/'Project - Data Engineering Data Copier'/retail_pg:/var/lib/postgresql/data -v /Users/Mishaun_Bhakta/Documents/'Python & Projects'/Courses/'Data Engineering Essentials'/'Project - Data Engineering Data Copier'/data/retail_db_json:/retail_db_json -p 5452:5432 postgres
+
+---
+
+Create DB by accessing container and entering psql shell as postgres superuser
+
+%%
+docker exec \
+  -it retail_pg \
+  psql -U postgres
+
+%%
+CREATE DATABASE retail_db;
+CREATE USER retail_user WITH ENCRYPTED PASSWORD 'itversity';
+GRANT ALL PRIVILEGES ON DATABASE retail_db TO retail_user;
+
+
+Login as retail user and execute create tables sql script with psql shell
+
+%%
+docker exec \
+  -it retail_pg \
+  psql -U retail_user \
+  -d retail_db  \
+  -f /retail_db_json/create_db_tables_pg.sql
