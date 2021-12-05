@@ -3,14 +3,13 @@ from decouple import config
 from read import get_json_reader
 from write import load_to_table
 
-
 def main():
     conn = config('DB_CONN')
-    base_dir = config('BASE_DIR')
+    rel_dir = config('REL_DATA_DIR')
     table_names = sys.argv[1].split(',')
 
     for table in table_names:
-        json_reader = get_json_reader(base_dir, table, chunksize=1000)
+        json_reader = get_json_reader(rel_dir, table, chunksize=1000)
 
         for df in json_reader:
             try:
