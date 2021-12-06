@@ -2,9 +2,11 @@ import sys
 from decouple import config
 from read import get_json_reader
 from write import load_to_table
+from build_connection import get_db_connection
 
 def main():
-    conn = config('DB_CONN')
+    conn = get_db_connection()
+
     rel_dir = config('REL_DATA_DIR')
     table_names = sys.argv[1].split(',')
 
